@@ -139,7 +139,8 @@ func UpdateUser(req events.APIGatewayProxyRequest, tableName string, dynaClient 
 	if err != nil {
 		return nil, errors.New(ErrorCouldNotDynamoPutItem)
 	}
-
+	return &u, nil
 }
 func DeleteUser(req events.APIGatewayProxyRequest, tableName string, dynaClient dynamodbiface.DynamoDBAPI) error {
+
 }

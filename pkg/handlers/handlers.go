@@ -51,9 +51,16 @@ func CreateUser(req events.APIGatewayProxyRequest, tableName string, dynaClient 
 			aws.String(err.Error()),
 		})
 	}
-	return apiResponse(http.StatusCreated, result)
+	return apiResponse(http.StatusCreated, nil)
 }
 func DeleteUser(req events.APIGatewayProxyRequest, tableName string, dynaClient dynamodbiface.DynamoDBAPI) (*events.APIGatewayProxyResponse, error) {
+	err := user.DeleteUser()(req, tableName, dynaClient)
+	if err != nil {
+		return apiResponse(http.StatusBadRequest, ErrorBody{
+			aws.String(err.Error()),
+		})
+	}
+	return apiResponse(http.StatusOK, nil)
 }
 func UpdateUser(req events.APIGatewayProxyRequest, tableName string, dynaClient dynamodbiface.DynamoDBAPI) (*events.APIGatewayProxyResponse, error) {
 	result, err := user.UpdateUser(req, tableName, dynaClient)
@@ -62,7 +69,7 @@ func UpdateUser(req events.APIGatewayProxyRequest, tableName string, dynaClient 
 			aws.String(err.Error()),
 		})
 	}
-	return apiResponse(http.StatusOK, result)
+	return apiResponse(http.StatusOK, nil)
 }
 func UnhandleMethod() (*events.APIGatewayProxyResponse, error) {
 	return apiResponse(http.StatusMethodNotAllowed, ErrorMethodNotAllowed)
